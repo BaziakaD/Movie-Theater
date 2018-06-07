@@ -38,6 +38,6 @@ $ java -jar -DSpring.profiles.active=prod target/Movie_Cinema_Spring-1.0-SNAPSHO
 You can use docker-compose for create mysql container.
 
 ```sh
-cd Movie-Theater
-docker-compose up
+$ cd Movie-Theater
+$ docker-compose up
 ```
