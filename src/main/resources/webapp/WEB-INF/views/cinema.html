@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Add cinema</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous">
+</head>
+
+<body class="bg-light">
+
+    <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
+        <a class="navbar-brand mr-auto mr-lg-0" th:href="@{/tickets}">Tickets</a>
+
+        <div class="navbar-collapse offcanvas-collapse" id="navbarsExampleDefault">
+            <ul class="navbar-nav mr-auto">
+
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/booking/select/event}">Booking</a>
+                </li>
+
+                <li sec:authorize="${hasRole('ROLE_ADMIN')}"  class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Add</a>
+                    <div class="dropdown-menu" aria-labelledby="dropdown01">
+                        <a class="dropdown-item" th:href="@{/admin/cinema}">Cinema</a>
+                        <a class="dropdown-item" th:href="@{/admin/event}">Event</a>
+                        <a class="dropdown-item" th:href="@{/admin/cash}">User cash</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <form th:action="@{/logout}" method="post">
+            <button class="btn btn-link" type="submit">Logout</button>
+        </form>
+
+    </nav>
+
+    <div class="container w-50 mt-5">
+
+        <div class="py-5 text-center">
+            <h2>Add Cinema</h2>
+        </div>
+
+        <div  th:if="${(param.successfullyAdding != null) and (param.successfullyAdding[0] == 'true')}" class="row justify-content-center">
+            <div class="col-md-6 mb-3">
+                <h4 class="mb-3 text-success">Adding successfully</h4>
+            </div>
+        </div>
+
+        <div  th:if="${(param.duplicateCinemaName != null)}" class="row justify-content-center">
+            <div class="col-md-6 mb-3">
+                <h4 class="mb-3 text-danger" th:text="${param.duplicateCinemaName + ' is already present'}"/>
+            </div>
+        </div>
+
+        <div  th:if="${(param.error != null)}" class="row justify-content-center">
+            <div class="col-md-6 mb-3">
+                <h4 class="mb-3 text-danger" th:text="${'Error during processing'}"/>
+            </div>
+        </div>
+
+        <form th:action="@{/admin/cinema}" method="post">
+
+            <div class="row justify-content-center">
+                <div class="col-md-6 mb-3">
+                    <h4 class="mb-3">Description:</h4>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-md-6 mb-3">
+                    <label>Name:</label>
+                    <input name="name" type="text" class="form-control" required>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-md-6 mb-3">
+                    <label>Length, min:</label>
+                    <input name="length" type="number" class="form-control" min="1" max="300" required>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-md-6 mb-3">
+                    <label>Rating</label>
+                    <select name="rating" class="custom-select d-block w-100" required>
+                        <option th:each="rating : ${ratings}" th:value=${rating.toString()} th:utext="${rating.toString()}"/>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-md-6 mb-3">
+                    <button class="btn btn-primary btn-lg btn-block" type="submit">Add</button>
+                </div>
+            </div>
+
+        </form>
+
+
+        <form th:action="@{/admin/cinema/file}" method="post" enctype="multipart/form-data">
+
+            <div class="row justify-content-center">
+                <div class="col-md-6 mb-3">
+                    <h4 class="mb-3">Or, you can upload the file:</h4>
+                    <input type="file" name="file" class="form-control-file">
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-md-6 mb-3">
+                    <button class="btn btn-primary btn-lg btn-block" type="submit">Upload</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+</body>
+
+</html>
